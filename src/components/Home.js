@@ -2,24 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { IoSearchOutline, IoCloseSharp } from "react-icons/io5";
 import { MdFilterListAlt } from "react-icons/md";
 import ProductItem from './ProductItem';
+import Shimmer from './Shimmer';
+import Carousel from './Carousel';
+import { carouselList } from '../utils/constants';
 
 export default function Home() {
   const [initialProductList, setInitialProductList] = useState([]);
   const [filteredProductList, setFilteredProductList] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [sortByPrice, setSortByPrice] = useState(null); // null: no sorting, 'asc': low to high, 'desc': high to low
+  const [loading, setLoading] = useState(true); // Initially set loading to true
 
   useEffect(() => {
-    // Fetch initial product list
     const fetchData = async () => {
       try {
         const response = await fetch('https://fakestoreapi.com/products');
         const data = await response.json();
         setInitialProductList(data);
         setFilteredProductList(data);
-        console.log(data)
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
+        setLoading(false); 
       }
     };
     fetchData();
@@ -39,10 +43,11 @@ export default function Home() {
     setSearchInput(searchInputText);
     const filteredList = initialProductList.filter(
       (product) =>
-        product.name?.toLowerCase().includes((searchInputText || '').toLowerCase())
+        product.title?.toLowerCase().includes((searchInputText || '').toLowerCase())
     );
     setFilteredProductList(filteredList);
   };
+  
   
   const resetSearch = () => {
     setSearchInput("");
@@ -96,16 +101,23 @@ export default function Home() {
   const renderProductList = () => {
     return (
       <ul className='flex flex-wrap w-[70vw] text-xl'>
-        {filteredProductList.map((item, index) => (
-          <ProductItem key={index} item={item} />
-        ))}
+        {loading ? (
+          <Shimmer /> // Show shimmer effect while loading
+        ) : (
+          filteredProductList.map((item, index) => (
+            <ProductItem key={index} item={item} />
+          ))
+        )}
       </ul>
     );
   };
+ 
 
   return (
-    <div>
+    <div className='flex flex-col'>
+      <Carousel  carouselList={carouselList}/>
       <div className='flex w-[70vw] text-2xl justify-between'>
+        
         {renderFilter()}
         {renderSearchInput()}
       </div>

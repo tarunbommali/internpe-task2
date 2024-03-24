@@ -1,0 +1,4 @@
+[[redirects]]
+from  = "/*"
+to = "/movie_search.html"
+status = 200

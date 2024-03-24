@@ -1,26 +1,30 @@
-import React from 'react' 
+import React, { lazy , Suspense} from 'react' 
 import ReactDOM  from 'react-dom/client'
 import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Home  from './components/Home'
 import Header  from './components/Header'
 import Footer from './components/Footer'
-import Cart from './components/Cart'
+
 import ProductItemDetails from './components/ProductItemDetails'
+import About from './components/About'
+import { CartProvider } from './context/cartContext'
+
+const Cart = lazy(() => import('./components/Cart')) 
 
 const AppLayout = () => (
-    <div>
+    <>
         <Header />
         <div className='min-h-screen flex flex-col items-center py-3'>
         <Outlet />
         </div>
         <Footer />
-    </div>
+    </>
 )
 
 const appRouter  = createBrowserRouter([
     {
         path : "/", 
-        element: <AppLayout />,
+        element: <CartProvider><AppLayout /></CartProvider>,
         children : [
             {
                 path : "/" , 
@@ -28,11 +32,14 @@ const appRouter  = createBrowserRouter([
             }, 
             {
                 path : "/cart" , 
-                element : <Cart/>
+                element :<Suspense fallback={"...Loading"}> <Cart/></Suspense>
             },
             {
-                path : "product/:id", 
+                path : "/product/:id", 
                 element : <ProductItemDetails />
+            }, {
+                path : "/about" , 
+                element: <About/>
             }
         ]
     }
