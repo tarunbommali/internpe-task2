@@ -5,6 +5,7 @@ import Home  from './components/Home'
 import Header  from './components/Header'
 import Footer from './components/Footer'
 import Cart from './components/Cart'
+import ProductItemDetails from './components/ProductItemDetails'
 
 const AppLayout = () => (
     <div>
@@ -28,6 +29,10 @@ const appRouter  = createBrowserRouter([
             {
                 path : "/cart" , 
                 element : <Cart/>
+            },
+            {
+                path : "product/:id", 
+                element : <ProductItemDetails />
             }
         ]
     }

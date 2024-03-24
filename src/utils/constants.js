@@ -1,0 +1,1 @@
+export const STAR_RATING_URL = "https://res.cloudinary.com/drdgj0pch/image/upload/v1710400102/Frontend/Icons/star_rating_twbpwj.svg"
